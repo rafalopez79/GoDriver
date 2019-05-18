@@ -1,0 +1,16 @@
+{
+    "serverport": 8000,
+    "webport": 8080,
+    "connections": [
+        {
+            "id": "test1",
+            "user": "user1",
+            "password": "password1"
+        },
+        {
+            "id": "test2",
+            "user": "user2",
+            "password": "password2"
+        }
+    ]
+}
