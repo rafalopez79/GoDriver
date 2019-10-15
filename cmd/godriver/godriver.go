@@ -8,6 +8,7 @@ import (
 	"os"
 
 	config "github.com/rafalopez79/godriver/internal/config"
+	server "github.com/rafalopez79/godriver/internal/server"
 	util "github.com/rafalopez79/godriver/internal/util"
 )
 
@@ -43,7 +44,7 @@ func getConfig(url string) (*config.Configuration, error) {
 	return config.Parse(data)
 }
 
-// this is a comment
+// main function
 func main() {
 	configurl := parseArgs()
 	logout := initLog()
@@ -55,6 +56,7 @@ func main() {
 	if err != nil {
 		log.Panic("Config not valid", err)
 	}
-	log.Print(config)
-
+	s := server.NewServer(config.ServerVersion, config.ProtocolVersion, 0, 0)
+	server.Serve(s, config.ServerPort)
+	//close
 }
