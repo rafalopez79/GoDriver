@@ -46,6 +46,7 @@ func getConfig(url string) (*config.Configuration, error) {
 
 // main function
 func main() {
+
 	configurl := parseArgs()
 	logout := initLog()
 	defer logout.Flush()
@@ -56,7 +57,7 @@ func main() {
 	if err != nil {
 		log.Panic("Config not valid", err)
 	}
-	s := server.NewServer(config.ServerVersion, config.ProtocolVersion, 0, 0)
+	s := server.NewServer(config.ServerVersion, config.ProtocolVersion, 0, "")
 	server.Serve(s, config.ServerPort)
 	//close
 }

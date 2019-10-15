@@ -1,0 +1,13 @@
+language: go
+
+go:
+  - "1.13"
+
+dist:
+  xenial
+
+env:
+  - GO111MODULE=on
+
+script:
+  - go test -v ./...
