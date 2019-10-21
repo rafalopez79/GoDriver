@@ -1,8 +1,7 @@
 package mysql
 
 import (
-	"reflect"
-	"unsafe"
+	util "github.com/rafalopez79/godriver/internal/util"
 )
 
 //COMMANDS
@@ -180,24 +179,7 @@ const (
 
 //Util functions
 
-//String from slice
-func String(b []byte) (s string) {
-	bytes := (*reflect.SliceHeader)(unsafe.Pointer(&b))
-	data := (*reflect.StringHeader)(unsafe.Pointer(&s))
-	data.Data = bytes.Data
-	data.Len = bytes.Len
-	return
-}
-
-//Min of 2 ints
-func Min(a int, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}
-
 //ReadFixedLengthString reads string from byte[]
 func ReadFixedLengthString(buff []byte, l int) string {
-	return String(buff[:Min(len(buff), l)])
+	return util.String(buff[:util.Min(len(buff), l)])
 }
