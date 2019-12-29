@@ -1,7 +1,47 @@
 package mysql
 
 import (
-	util "github.com/rafalopez79/godriver/internal/util"
+	"bytes"
+)
+
+//Packet in the mysql protocol
+type Packet struct {
+	Body *bytes.Buffer
+}
+
+//NewPacket creates a new packet
+func NewPacket(options ...func(*Packet)) *Packet {
+	packet := Packet{
+		Body: nil,
+	}
+	for _, option := range options {
+		option(&packet)
+	}
+	return &packet
+}
+
+//NewPingPacket creates a new Ping Packet
+func NewPingPacket() *Packet {
+	return NewPacket(func(p *Packet) {
+		var data [1]byte
+		data[0] = ComPing
+		p.Body = bytes.NewBuffer(data[:])
+	})
+}
+
+//Len returns the lenght
+func (packet *Packet) Len() int {
+	body := packet.Body
+	if body == nil {
+		return 0
+	}
+	return body.Len()
+}
+
+//MaxPayloadLen of packet
+const (
+	MaxPayloadLen      int  = 1<<24 - 1
+	MinProtocolVersion byte = 10
 )
 
 //COMMANDS
@@ -176,10 +216,3 @@ const (
 	GoupFlag          = 32768
 	UniqueFlag        = 65536
 )
-
-//Util functions
-
-//ReadFixedLengthString reads string from byte[]
-func ReadFixedLengthString(buff []byte, l int) string {
-	return util.String(buff[:util.Min(len(buff), l)])
-}

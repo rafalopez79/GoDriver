@@ -10,6 +10,7 @@ import (
 	config "github.com/rafalopez79/godriver/internal/config"
 	server "github.com/rafalopez79/godriver/internal/server"
 	util "github.com/rafalopez79/godriver/internal/util"
+	"github.com/rafalopez79/godriver/mysql"
 )
 
 func initLog() *bufio.Writer {
@@ -57,7 +58,10 @@ func main() {
 	if err != nil {
 		log.Panic("Config not valid", err)
 	}
-	s := server.NewServer(config.ServerVersion, config.ProtocolVersion, 0, "")
-	server.Serve(s, config.ServerPort)
+	s, err := server.NewServer(config.ServerVersion, mysql.AuthNativePassword)
+	if err != nil {
+		log.Panic("Error creating server", err)
+	}
+	s.Serve(config.ServerPort)
 	//close
 }

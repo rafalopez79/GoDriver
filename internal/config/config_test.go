@@ -8,7 +8,7 @@ import (
 
 func TestParse(t *testing.T) {
 	txt := `{
-	  "serverversion": 	"5.5.5-",
+	  "serverversion": 	"5.5.5-test",
 	  "serverport": 8000,
 	   "webport": 8080,
 	   "connections": [

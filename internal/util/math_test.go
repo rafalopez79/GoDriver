@@ -2,7 +2,6 @@ package util
 
 import (
 	"testing"
-
 	"gotest.tools/assert"
 )
 

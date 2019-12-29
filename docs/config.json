@@ -1,11 +1,15 @@
 {
+    "serverversion": "5.5.5-GO",
     "serverport": 8000,
     "webport": 8080,
     "connections": [
         {
             "id": "test1",
             "user": "user1",
-            "password": "password1"
+            "password": "password1",
+            "dbuser": "dbuser1",
+            "dbpassword": "dbpassword1",
+            "dsns":""
         },
         {
             "id": "test2",
