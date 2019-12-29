@@ -45,7 +45,6 @@ func getPublicKeyFromCert(certPem []byte) (pk []byte, err error) {
 }
 
 // generate and sign RSA certificates with given CA
-// see: https://fale.io/blog/2017/06/05/create-a-pki-in-golang/
 func generateAndSignRSACerts(caPem, caKey []byte) (certPem []byte, keyPem []byte, err error) {
 	// Load CA
 	catls, err := tls.X509KeyPair(caPem, caKey)
@@ -56,7 +55,6 @@ func generateAndSignRSACerts(caPem, caKey []byte) (certPem []byte, keyPem []byte
 	if err != nil {
 		return nil, nil, err
 	}
-
 	// use the CA to sign certificates
 	serialNumberLimit := new(big.Int).Lsh(big.NewInt(1), 128)
 	serialNumber, err := rand.Int(rand.Reader, serialNumberLimit)
@@ -102,15 +100,15 @@ func generateCA() (caPem []byte, caKey []byte, err error) {
 	template := &x509.Certificate{
 		SerialNumber: serialNumber,
 		Subject: pkix.Name{
-			Organization:  []string{"ORGANIZATION_NAME"},
-			Country:       []string{"COUNTRY_CODE"},
-			Province:      []string{"PROVINCE"},
-			Locality:      []string{"CITY"},
-			StreetAddress: []string{"ADDRESS"},
-			PostalCode:    []string{"POSTAL_CODE"},
+			Organization:  []string{"Organization"},
+			Country:       []string{"Country"},
+			Province:      []string{"Province"},
+			Locality:      []string{"Locality"},
+			StreetAddress: []string{"StreetAddress"},
+			PostalCode:    []string{"PostalCode"},
 		},
-		NotBefore:             time.Now(),
-		NotAfter:              time.Now().AddDate(10, 0, 0),
+		NotBefore:             time.Now().AddDate(0, 0, -1),
+		NotAfter:              time.Now().AddDate(1, 0, 0),
 		IsCA:                  true,
 		ExtKeyUsage:           []x509.ExtKeyUsage{x509.ExtKeyUsageClientAuth, x509.ExtKeyUsageServerAuth},
 		KeyUsage:              x509.KeyUsageDigitalSignature | x509.KeyUsageCertSign | x509.KeyUsageKeyEncipherment,

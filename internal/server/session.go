@@ -99,24 +99,24 @@ func (session *Session) writeInitialHandShakePacket() (err error) {
 
 	server := session.server
 	//proto version
-	util.WriteBytes(buffer, server.protocolVersion)
+	mysql.WriteBytes(buffer, server.protocolVersion)
 	//server version
-	util.WriteNullTerminatedString(buffer, server.serverVersion)
+	mysql.WriteNullTerminatedString(buffer, server.serverVersion)
 	//conn id
-	util.WriteInt4(buffer, session.sessionID)
+	mysql.WriteInt4(buffer, session.sessionID)
 	//salt
-	util.Write(buffer, session.salt[:8])
-	util.WriteBytes(buffer, 0)
+	mysql.Write(buffer, session.salt[:8])
+	mysql.WriteBytes(buffer, 0)
 	//server caps
 
 	//server default collation
-	util.WriteBytes(buffer, server.collationID)
+	mysql.WriteBytes(buffer, server.collationID)
 	//status flags
 
 	//server caps 2
 
 	//if
-	util.WriteBytes(buffer, 0, 0, 0, 0, 0, 0)
+	mysql.WriteBytes(buffer, 0, 0, 0, 0, 0, 0)
 	//if
 
 	//if
@@ -143,12 +143,12 @@ func (session *Session) readClientHandShakePacket() (useSSL bool, err error) {
 	}
 	if len == 5 && server.capability&mysql.ClientProtocol41 != 0 {
 		//protocol41
-		capability, err := util.ReadInt2(packet.Body)
+		capability, err := mysql.ReadInt2(packet.Body)
 		if err != nil {
 			return false, err
 		}
 		session.capability = uint32(capability)
-		maxPacketSize, err := util.ReadInt3(packet.Body)
+		maxPacketSize, err := mysql.ReadInt3(packet.Body)
 		if err != nil {
 			return false, err
 		}
@@ -157,12 +157,12 @@ func (session *Session) readClientHandShakePacket() (useSSL bool, err error) {
 	} else if len < 32 {
 		return false, fmt.Errorf("Wrong client handshake packet lenght")
 	}
-	capability, err := util.ReadInt4(packet.Body)
+	capability, err := mysql.ReadInt4(packet.Body)
 	if err != nil {
 		return false, err
 	}
 	session.capability = capability
-	maxPacketSize, err := util.ReadInt4(packet.Body)
+	maxPacketSize, err := mysql.ReadInt4(packet.Body)
 	if err != nil {
 		return false, err
 	}
@@ -175,7 +175,7 @@ func (session *Session) readClientHandShakePacket() (useSSL bool, err error) {
 	packet.Body.Next(19) //reserved
 	var clientCapsExtra uint32
 	if session.server.capability&mysql.ClientProtocol41 != 0 {
-		clientCapsExtra, err = util.ReadInt4(packet.Body)
+		clientCapsExtra, err = mysql.ReadInt4(packet.Body)
 		if err != nil {
 			return false, err
 		}
