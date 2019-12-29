@@ -116,6 +116,9 @@ func (server *Server) handle(conn net.Conn) {
 		return
 	}
 	for {
-
+		err = s.Handle()
+		if err != nil {
+			return
+		}
 	}
 }

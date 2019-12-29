@@ -81,16 +81,27 @@ func (session *Session) AcceptClient() (err error) {
 	return nil
 }
 
-func isAuthMethodSupported(authMethod string) bool {
-	return authMethod == mysql.AuthNativePassword ||
-		authMethod == mysql.AuthCachingSHA2Password ||
-		authMethod == mysql.AuthSHA2Password
+//Handle client request after client accept
+func (session *Session) Handle() (err error) {
+	//server := session.server
+
+	//read packet
+	//packetIn, err := session.readPacket()
+	//write response
+
+	return nil
 }
 
 //Close closes session related resources
 func (session *Session) Close() error {
 	//TODO release resources
 	return nil
+}
+
+func isAuthMethodSupported(authMethod string) bool {
+	return authMethod == mysql.AuthNativePassword ||
+		authMethod == mysql.AuthCachingSHA2Password ||
+		authMethod == mysql.AuthSHA2Password
 }
 
 func (session *Session) writeInitialHandShakePacket() (err error) {
@@ -189,6 +200,11 @@ func (session *Session) readClientHandShakePacket() (useSSL bool, err error) {
 
 	}
 	return useSSL, nil
+}
+
+func (session *Session) readPacket() (packets []mysql.Packet, err error) {
+
+	return nil, nil
 }
 
 func (session *Session) writePacket(p *mysql.Packet) (err error) {
